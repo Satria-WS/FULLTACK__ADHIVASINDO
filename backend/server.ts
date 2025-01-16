@@ -1,10 +1,16 @@
 import express from "express";
 import dotenv from "dotenv";
 import { connectDb } from "./config/db"; // Import the connectDb function
+import authRoutes from './routes/authRoutes';
 
 dotenv.config();
 
 const app = express();
+
+app.use(express.json());  // Untuk parsing body JSON
+
+// Rute untuk autentikasi
+app.use('/api/auth', authRoutes);
 
 connectDb().then(() => {
   app.listen(9000, () => {
