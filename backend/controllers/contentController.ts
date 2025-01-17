@@ -6,7 +6,7 @@ interface CreateContentRequest extends Request {
     title: string;
     description: string;
   };
-  user: {
+  user?: {
     id: string;
   };
 }
@@ -27,6 +27,10 @@ interface DeleteContentRequest extends Request {
   };
 }
 
+// interface AuthenticatedRequest extends Request {
+//   user?: { id: string }; // Ensure `user` exists and has an `id`
+// }
+
 export const listContent = (req: Request, res: Response) => {
   const { page = 1, limit = 10, search = '' } = req.query;
 
@@ -36,14 +40,20 @@ export const listContent = (req: Request, res: Response) => {
   });
 };
 
-export const createContent = (req: CreateContentRequest, res: Response) => {
+export const createContent = (req:CreateContentRequest , res:Response) => {
   const { title, description } = req.body;
+
+  if (!req.user || !req.user.id) {
+     res.status(400).json({ message: 'User not authenticated' });
+    return;
+  }
 
   Content.create(title, description, req.user.id, (err, contentId) => {
     if (err) return res.status(500).json({ message: 'Error creating content' });
-    res.status(201).json({ message: 'Content created successfully' });
+    res.status(201).json({ message: 'Content created successfully', contentId });
   });
 };
+
 export const updateContent = (req: UpdateContentRequest, res: Response) => {
   const { id } = req.params;
   const { title, description } = req.body;
@@ -53,8 +63,6 @@ export const updateContent = (req: UpdateContentRequest, res: Response) => {
     res.json({ message: 'Content updated successfully' });
   });
 };
-
-
 
 export const deleteContent = (req: DeleteContentRequest, res: Response) => {
   const { id } = req.params;
