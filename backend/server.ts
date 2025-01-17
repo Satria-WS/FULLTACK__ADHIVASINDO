@@ -5,11 +5,12 @@ import { connectDb } from "./config/db"; // Import the connectDb function
 import authRouters from './routes/authRoutes';
 import contentRouters from "./routes/contentRoutes";
 import userRouters from "./routes/userRouter";
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
-
+app.use(cors({ credentials: true, origin: 'http://localhost:5173' }));
 app.use(express.json());  // Untuk parsing body JSON
 app.use(cookieParser());  // Untuk parsing cookies
 // Rute untuk autentikasi
