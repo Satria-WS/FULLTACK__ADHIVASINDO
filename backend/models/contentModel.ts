@@ -12,10 +12,16 @@ class Content {
     );
   }
 
-  static list(page: number, limit: number, search: any, callback: (arg0: QueryError | null, arg1: QueryResult | undefined) => void) {
+  static list(page: number, limit: number, search: string, userId: number, callback: (arg0: QueryError | null, arg1: QueryResult | undefined) => void) {
     const offset = (page - 1) * limit;
-    const query = `SELECT * FROM content WHERE title LIKE ? LIMIT ? OFFSET ?`;
-    db.query(query, [`%${search}%`, limit, offset], (err, results) => {
+    const query = `
+      SELECT * FROM content 
+      WHERE title LIKE ? 
+      AND user_id = ?
+      LIMIT ? OFFSET ?
+    `;
+    // const query = `SELECT * FROM content WHERE title LIKE ? LIMIT ? OFFSET ?`;
+    db.query(query, [`%${search}%`, userId, limit, offset], (err, results) => {
       if (err) return callback(err, undefined);
       callback(null, results);
     });

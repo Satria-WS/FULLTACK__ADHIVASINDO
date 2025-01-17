@@ -7,6 +7,15 @@ interface AuthenticatedRequest extends Request {
   };
 }
 
+// interface AuthenticatedRequestx extends Request {
+//   user?: { id: string };
+//   query: {
+//     page?: string | number;
+//     limit?: string | number;
+//     search?: string;
+//   };
+// }
+
 interface CreateContentRequest extends Request {
   body: {
     title: string;
@@ -37,11 +46,28 @@ interface DeleteContentRequest extends Request {
 //   user?: { id: string }; // Ensure `user` exists and has an `id`
 // }
 
-export const listContent = (req: Request, res: Response) => {
-  const { page = 1, limit = 10, search = '' } = req.query;
+export const listContent = (req: AuthenticatedRequest, res: Response) => {
+  // Get query parameters with defaults
+  const page = Number(req.query.page || 1);
+  const limit = Number(req.query.limit || 10);
+  const search = String(req.query.search || '');
 
-  Content.list(Number(page), Number(limit), search, (err, contents) => {
-    if (err) return res.status(500).json({ message: 'Error fetching content' });
+  // Get user ID from auth middleware
+  if (!req.user?.id) {
+    res.status(401).json({ message: 'User not authenticated' });
+    return
+  }
+  
+  const userId = parseInt(req.user.id);
+
+  // Call the modified Content.list method with userId
+  Content.list(page, limit, search, userId, (err, contents) => {
+    if (err) {
+      return res.status(500).json({ 
+        message: 'Error fetching content',
+        error: err.message 
+      });
+    }
     res.json(contents);
   });
 };
