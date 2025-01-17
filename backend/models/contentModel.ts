@@ -21,6 +21,22 @@ class Content {
     });
   }
 
+  static listByUserId(userId: number, callback: (err: QueryError | null, results: QueryResult | undefined) => void) {
+    const query = `SELECT * FROM content WHERE user_id = ?`;
+    db.query(query, [userId], (err, results) => {
+      if (err) return callback(err, undefined);
+      callback(null, results);
+    });
+  }
+
+  static getById(id: number, callback: (err: QueryError | null, result: QueryResult | undefined) => void) {
+    const query = `SELECT * FROM content WHERE id = ?`;
+    db.query(query, [id], (err, result) => {
+      if (err) return callback(err, undefined);
+      callback(null, result);
+    });
+  }
+
   static update(id: any, title: any, description: any, callback: (arg0: QueryError | null, arg1: undefined) => void) {
     db.query(
       'UPDATE content SET title = ?, description = ? WHERE id = ?',
