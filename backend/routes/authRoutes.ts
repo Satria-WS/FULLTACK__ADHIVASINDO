@@ -9,7 +9,7 @@ router.post('/register', register);
 // Rute untuk login
 router.post('/login', login);
 // Rute untuk logout
-router.post('/logout', logout);
+router.delete('/logout', logout);
 
 
 export default router;

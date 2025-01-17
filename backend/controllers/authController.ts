@@ -10,13 +10,20 @@ interface Request {
   };
 }
 
+
 interface Response {
   cookie(arg0: string, token: string, arg2: {
     httpOnly?: boolean; secure?: boolean; // Set secure flag in production
-    maxAge: number;
+    maxAge: number; sameSite?: 'strict' | 'lax' | 'none'; path?: string;
   }): unknown;
   status: (code: number) => Response;
   json: (body: any) => void;
+}
+
+interface SessionRequest extends Request {
+  session?: {
+    destroy: (callback: (err: any) => void) => void;
+  };
 }
 
 export const register = async (req: Request, res: Response) => {
@@ -69,7 +76,41 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-export const logout = (req:Request,res:Response) => {
-  res.cookie('token', '', { maxAge: 0 });
-  res.json({ message: "Logout successful" });
-}
+// export const logout = (req:Request,res:Response) => {
+//   res.cookie('token', '', { maxAge: 0 });
+//   res.json({ message: "Logout successful" });
+// }
+
+
+export const logout = (req: SessionRequest, res: Response) => {
+  try {
+    // Clear the JWT cookie with secure options
+    res.cookie('token', '', {
+      httpOnly: true,
+      // secure: process.env.NODE_ENV === 'production', // Set secure flag in production
+      maxAge: 0, // Set cookie to expire immediately
+      sameSite: 'strict', // Protect against CSRF
+      path: '/' // Ensure cookie is cleared from all paths
+    });
+
+    // Clear any session data if you're using sessions
+    if (req.session) {
+      req.session.destroy((err) => {
+        if (err) {
+          console.error('Error destroying session:', err);
+        }
+      });
+    }
+
+    res.status(200).json({ 
+      success: true,
+      message: "Logged out successfully" 
+    });
+  } catch (err: any) {
+    res.status(500).json({ 
+      success: false,
+      message: "Error during logout",
+      error: err.message 
+    });
+  }
+};
