@@ -4,7 +4,7 @@ import axios from 'axios';
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login?: (email: string, password: string) => Promise<void>;
   logout: () => void;
 }
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -21,22 +21,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const login = async (email: string, password: string) => {
-    try {
-      const response = await axios.post(
-        'http://localhost:9000/api/auth/login',
-        { email, password },
-        { withCredentials: true }
-      );
-      if (response.status === 200) {
-        setIsAuthenticated(true);
-        navigate('/dashboard');
-      }
-    } catch (error) {
-      console.error('Login failed:', error);
-      setIsAuthenticated(false);
-    }
-  };
+  // const login = async (email: string, password: string) => {
+  //   try {
+  //     const response = await axios.post(
+  //       'http://localhost:9000/api/auth/login',
+  //       { email, password },
+  //       { withCredentials: true }
+  //     );
+  //     if (response.status === 200) {
+  //       setIsAuthenticated(true);
+  //       navigate('/dashboard');
+  //     }
+  //   } catch (error) {
+  //     console.error('Login failed:', error);
+  //     setIsAuthenticated(false);
+  //   }
+  // };
 
   const logout = () => {
     setIsAuthenticated(false);
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, logout }}>
       {children}
     </AuthContext.Provider>
   );

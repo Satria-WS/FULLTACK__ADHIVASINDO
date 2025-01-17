@@ -47,14 +47,14 @@ export const register = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findByEmail(email);
+    const user:any = await User.findByEmail(email);
     if (!user) {
-      return res.status(400).json({ message: 'User not found' });
+      return res.status(400).json({ message: 'Invalid email or password' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid password' });
+    if (!isMatch ) {
+      return res.status(400).json({ message: 'Invalid email or password' });
     }
 
     if (!process.env.JWT_SECRET) {

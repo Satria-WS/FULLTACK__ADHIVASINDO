@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginService } from "../services/authService"; // Example service
+import { useAuth } from "./AuthContext";
 import axios from "axios";
 
 
 const Login = () => {
   const navigate = useNavigate();
+    // const { login } = useAuth();  // Destructure login from context
   // state input
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   // state error
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,16 +28,19 @@ const Login = () => {
       );
   
       if (status === 200) {
-        console.log(data.msg); // Log the success message
+        console.log(data.message); // Log the success message
         console.log(data);
         // You can navigate to the dashboard here
         navigate("/dashboard");
       }
     } catch (error) {
       // Handle error
-      const errorMsg = error.response ? error.response.data.msg : 'An error occurred';
-      console.log(errorMsg);
-      setError(errorMsg);
+      if (error.response) { 
+        console.log(error.response.data.message);
+        setError(error.response.data.message)
+      }  
+     
+    
     }
   };
   return (
@@ -69,10 +72,11 @@ const Login = () => {
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    required
                   />
-                  {emailError && (
-                    <p className="text-red-500 text-xs mt-1">{emailError}</p>
-                  )}
+                  {/* {error && (
+                    <p className="text-red-500 text-xs mt-1">{error}</p>
+                  )} */}
                 </div>
 
                 {/* Password Field */}
@@ -87,10 +91,11 @@ const Login = () => {
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    required
                   />
-                  {passwordError && (
-                    <p className="text-red-500 text-xs mt-1">{passwordError}</p>
-                  )}
+                  {/* {error && (
+                    <p className="text-red-500 text-xs mt-1">{error}</p>
+                  )} */}
                 </div>
 
                 {/* Submit Button */}
