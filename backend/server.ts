@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 import { connectDb } from "./config/db"; // Import the connectDb function
 import authRoutes from './routes/authRoutes';
 import contentRouters from "./routes/contentRoutes";
@@ -10,7 +11,7 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());  // Untuk parsing body JSON
-
+app.use(cookieParser());  // Untuk parsing cookies
 // Rute untuk autentikasi
 app.use('/api/auth', authRoutes);
 app.use('/api',contentRouters)
