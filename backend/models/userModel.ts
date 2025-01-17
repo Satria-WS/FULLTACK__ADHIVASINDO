@@ -34,6 +34,15 @@ class User {
       throw new Error('Error finding user: ' + err.message);
     }
   }
+
+  static async getAllUsers(): Promise<UserRow[]> {
+    try {
+      const [rows]: [UserRow[], any] = await db.promise().query('SELECT id, username, email, created_at FROM users');
+      return rows;
+    } catch (err: any) {
+      throw new Error('Error fetching users: ' + err.message);
+    }
+  }
 }
 
 export default User;
