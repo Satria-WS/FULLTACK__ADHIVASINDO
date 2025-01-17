@@ -1,0 +1,15 @@
+The tokens generated in the login and register functions are essentially the same in terms of their structure and purpose. Both tokens are JSON Web Tokens (JWT) used for authentication. However, there are some contextual differences:
+
+Context of Generation:
+
+Register: The token is generated when a new user successfully registers. This allows the user to be logged in immediately after registration.
+Login: The token is generated when an existing user successfully logs in. This allows the user to access protected resources after verifying their credentials.
+User Data:
+
+Register: The token is created using the newly registered user's ID.
+Login: The token is created using the existing user's ID after verifying their email and password.
+Purpose:
+
+Register: To authenticate the user right after they create an account.
+Login: To authenticate the user each time they log in.
+In both cases, the token contains the user's ID and is signed with a secret key, ensuring secure authentication for subsequent requests.
