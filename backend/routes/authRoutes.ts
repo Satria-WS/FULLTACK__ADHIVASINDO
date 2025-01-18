@@ -10,7 +10,7 @@ router.post('/register', register);
 // Rute untuk login
 router.post('/login', login);
 // Rute untuk logout
-router.delete('/logout', logout);
+router.post('/logout', logout);
 router.get('/verify', verify);
 
 
