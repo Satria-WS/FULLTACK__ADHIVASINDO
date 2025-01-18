@@ -26,12 +26,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     // Check authentication status when the app loads
     useEffect(() => {
-      checkAuth();
+     checkAuth();
     }, []);
   
     const checkAuth = async () => {
       try {
-        // Make a request to your backend to validate the token
+        // Make a request to  backend to validate the token
         const response = await axios.get('http://localhost:9000/api/auth/verify', {
           withCredentials: true // Important for sending cookies
         });
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } finally {
         setLoading(false);
       }
-       console.log('isAuth?', isAuthenticated);
+   
       console.log('heelo')
     };
 
@@ -83,9 +83,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
     // Show loading spinner or placeholder while checking authentication
-    if (loading) {
-      return <div>Loading...</div>; // You can replace this with a proper loading component
-    }
+    // if (loading) {
+    //   return <div>Loading...</div>; // You can replace this with a proper loading component
+  // }
+  console.log('isAuth?', isAuthenticated);
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout , loading }}>
       {children}
