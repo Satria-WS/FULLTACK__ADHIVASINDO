@@ -1,47 +1,33 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "./AuthContext";
-import axios from "axios";
-
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from './AuthContext';
+import axios from 'axios';
 
 const Login = () => {
+
   const navigate = useNavigate();
-    // const { login } = useAuth();  // Destructure login from context
-  // state input
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { login } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   // state error
 
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setError("");
 
     try {
-      // Send login request to the server
-      const { data, status } = await axios.post(
-        "http://localhost:9000/api/auth/login", 
-        { email, password }, 
-        { withCredentials: true }
-      );
-  
-      if (status === 200) {
-        console.log(data.message); // Log the success message
-        console.log(data);
-        // You can navigate to the dashboard here
-        navigate("/dashboard");
-      }
+      await login(email, password);
     } catch (error) {
-      // Handle error
-      if (error.response) { 
-        console.log(error.response.data.message);
-        setError(error.response.data.message)
-      }  
-     
-    
+      if (error.response) {
+        setError(error.response.data.message);
+      } else {
+        setError("An error occurred during login");
+      }
     }
+
   };
   return (
     <>
@@ -117,7 +103,7 @@ const Login = () => {
                     New to account?
                   </span>
                   <span
-                    onClick={() => navigate("/signup")}
+                    onClick={() => navigate('/signup')}
                     className="text-[#FEAF00] cursor-pointer hover:font-semibold active:underline "
                   >
                     Sign up now.

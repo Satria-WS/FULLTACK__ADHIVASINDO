@@ -2,12 +2,16 @@ import User from '../models/userModel';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
+
 interface Request {
   body: {
     username: string;
     email: string;
     password: string;
   };
+}
+interface RequestWithCookies extends Request {
+  cookies: { [key: string]: string };
 }
 
 
@@ -115,6 +119,22 @@ export const logout = (req: SessionRequest, res: Response) => {
   }
 };
 
+
+export const verify = (req: RequestWithCookies, res: Response) => {
+  try {
+    // Check if the token in the cookie is valid
+    const token = req.cookies.token; // or whatever your cookie name is
+    if (!token) {
+      return res.status(401).json({ message: 'No token found' });
+    }
+
+    // Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+    res.status(200).json({ message: 'Token is valid', user:decoded });
+  } catch (error) {
+    res.status(401).json({ message: 'Invalid token' });
+  }
+}
 
 export const getAllUsers = async (req: Request, res: Response) => {
   try {

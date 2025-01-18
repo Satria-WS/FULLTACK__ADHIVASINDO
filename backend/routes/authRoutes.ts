@@ -1,5 +1,6 @@
 import express from 'express';
-import { register, login, logout } from "../controllers/authController";
+import { register, login, logout ,verify} from "../controllers/authController";
+
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ router.post('/register', register);
 router.post('/login', login);
 // Rute untuk logout
 router.delete('/logout', logout);
-
+router.get('/verify', verify);
 
 
 

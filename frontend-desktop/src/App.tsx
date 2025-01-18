@@ -14,20 +14,19 @@ import ProtectRoute from './components/Auth/ProtectRoute';
 function App() {
   return (
     <>
-  
-        <Router>
+      <Router>
+        <AuthProvider>
           <Routes>
             <Route path="/" element={<Navigate to="/login" />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/dashboard" element={<DashboardHome />} />
             {/* Protected routes */}
             <Route element={<ProtectRoute />}>
               <Route path="/dashboard" element={<DashboardHome />} />
             </Route>
           </Routes>
-        </Router>
-   
+        </AuthProvider>
+      </Router>
     </>
   );
 }
