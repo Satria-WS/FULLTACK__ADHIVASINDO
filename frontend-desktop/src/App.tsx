@@ -10,6 +10,7 @@ import Signup from './components/Auth/Signup';
 import DashboardHome from './components/Home/Dashboard';
 import Login from './components/Auth/Login';
 import ProtectRoute from './components/Auth/ProtectRoute';
+import Test from './components/Home/Test';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/" element={<Navigate to="/login" />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/test" element={<Test/>} />
             {/* Protected routes */}
             <Route element={<ProtectRoute />}>
               <Route path="/dashboard" element={<DashboardHome />} />
