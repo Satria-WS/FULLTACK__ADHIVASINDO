@@ -1,76 +1,136 @@
-import * as React from 'react';
-import { SvgIcon } from '@mui/material';
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
+import React, { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { SvgIcon } from "@mui/material";
+import { styled, alpha } from "@mui/material/styles";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import InputBase from "@mui/material/InputBase";
+import MenuIcon from "@mui/icons-material/Menu";
+import SearchIcon from "@mui/icons-material/Search";
+import { useNavigate } from "react-router-dom"; //navigate
+
+// Components
+import Modul from "./Modul";
+import Perserta from "./Perserta";
+import Settings from "./Settings";
 
 // icon dashboard
-import { MdDashboard } from 'react-icons/md';
-import { MdOutlineViewModule } from 'react-icons/md';
-import Group from '../../assets/group.png';
-import { IoIosSettings } from 'react-icons/io';
-import { CiLogout } from 'react-icons/ci';
+import { MdDashboard } from "react-icons/md";
+import { MdOutlineViewModule } from "react-icons/md";
+import Group from "../../assets/group.png";
+import { IoIosSettings } from "react-icons/io";
 
 const GroupIcon: React.FC = () => {
   return <img className="w-7" src={Group} alt="Logo" />;
 };
 
 const Dashboard = () => {
-  const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
+  const navigate = useNavigate();
+
+  // State to track which content to show
+  const [currentContent, setCurrentContent] = useState("dashboard");
+
+  // Function to render the appropriate content
+  const renderContent = () => {
+    switch (currentContent) {
+      case "dashboard":
+        return <div>Dashboard Content</div>;
+      case "modul":
+        return <Modul />;
+      case "peserta":
+        return <Perserta />;
+      case "settings":
+        return <Settings />;
+      default:
+        return <div>Dashboard Content</div>;
+    }
+  };
+
+  const Search = styled("div")(({ theme }) => ({
+    position: "relative",
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.black, 0.15),
-    '&:hover': {
+    "&:hover": {
       backgroundColor: alpha(theme.palette.common.black, 0.25),
     },
     marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing(1),
-      width: 'auto',
+      width: "auto",
     },
   }));
 
-  const SearchIconWrapper = styled('div')(({ theme }) => ({
+  const SearchIconWrapper = styled("div")(({ theme }) => ({
     padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    height: "100%",
+    position: "absolute",
+    pointerEvents: "none",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   }));
 
   const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    width: '100%',
-    '& .MuiInputBase-input': {
+    color: "inherit",
+    width: "100%",
+    "& .MuiInputBase-input": {
       padding: theme.spacing(1, 1, 1, 0),
       // vertical padding + font size from searchIcon
       paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-      transition: theme.transitions.create('width'),
-      [theme.breakpoints.up('sm')]: {
-        width: '12ch',
-        '&:focus': {
-          width: '20ch',
+      transition: theme.transitions.create("width"),
+      [theme.breakpoints.up("sm")]: {
+        width: "12ch",
+        "&:focus": {
+          width: "20ch",
         },
       },
     },
   }));
   const imageBase64 =
-    'iVBORw0KGgoAAAANSUhEUgAAABgAAAAcCAMAAABMOI/cAAAArlBMVEX///////7Q5Kze7Mmk0WWu1XeMxiv4+/SSyDV/wADK46eVyT+FwxLx9+fG1+ZBerAAUp0FYaZ/o8j19//D4JKpv9cARZkpa6o2cq4AUZ0ATJsfaazV4tuGwx/R3+oAWKGzyN0zb7K015NzmcCt1XHD35m80OKaudUAVZ/O3N2Hp8/m9M7q8PbZ6r4ATpxfi7rq8PmPrs7s9tlii8KgvbuSyUpcoUszfm4scYBdjK38/ZJYAAABLElEQVR4AXVShXrDIBiEOmvcYaPexsnS+fu/2P58cbsIcMcdijrAaBoY4cWMtFzNCOvNdpgBD7w78jIeqCD2kiQPSEXVdMO0iLTf9njbcT3KXt8kTla4k3Y4nhA6HbXzhXCy7lg8BQFOlF5v4Lk3loePcBGgBjTccU6WqIJRdVEYjWLC+abikwN8D/uRoGPgohWEpZUAnqOgTLezQLwvCZfW9cJUeqSCapp7pIoscelWZdks0POHnYnjkT22INwrIdPcpCh9cRSPJyxFrtadMb/soQbicCdSs/m+cwIZkIujuZE29UbihBllLWcfYFi2m2XrZpX5uYFF4EoAxigtwvsiTyhbAeWPIsn5hvwBYEMS9nPDVU7lKL3q72J4t3DxGn/y5K072TPXMBkQ/xksF0y7KdnqAAAAAElFTkSuQmCC';
+    "iVBORw0KGgoAAAANSUhEUgAAABgAAAAcCAMAAABMOI/cAAAArlBMVEX///////7Q5Kze7Mmk0WWu1XeMxiv4+/SSyDV/wADK46eVyT+FwxLx9+fG1+ZBerAAUp0FYaZ/o8j19//D4JKpv9cARZkpa6o2cq4AUZ0ATJsfaazV4tuGwx/R3+oAWKGzyN0zb7K015NzmcCt1XHD35m80OKaudUAVZ/O3N2Hp8/m9M7q8PbZ6r4ATpxfi7rq8PmPrs7s9tlii8KgvbuSyUpcoUszfm4scYBdjK38/ZJYAAABLElEQVR4AXVShXrDIBiEOmvcYaPexsnS+fu/2P58cbsIcMcdijrAaBoY4cWMtFzNCOvNdpgBD7w78jIeqCD2kiQPSEXVdMO0iLTf9njbcT3KXt8kTla4k3Y4nhA6HbXzhXCy7lg8BQFOlF5v4Lk3loePcBGgBjTccU6WqIJRdVEYjWLC+abikwN8D/uRoGPgohWEpZUAnqOgTLezQLwvCZfW9cJUeqSCapp7pIoscelWZdks0POHnYnjkT22INwrIdPcpCh9cRSPJyxFrtadMb/soQbicCdSs/m+cwIZkIujuZE29UbihBllLWcfYFi2m2XrZpX5uYFF4EoAxigtwvsiTyhbAeWPIsn5hvwBYEMS9nPDVU7lKL3q72J4t3DxGn/y5K072TPXMBkQ/xksF0y7KdnqAAAAAElFTkSuQmCC";
+
+  const iconDashboard = [
+    {
+      id: 1,
+      icon: <MdDashboard />,
+      label: "Dashboard",
+      content: "dashboard",
+    },
+    {
+      id: 2,
+      icon: <MdOutlineViewModule />,
+      label: "Modules",
+      content: "modul",
+    },
+    {
+      id: 3,
+      icon: <GroupIcon />,
+      label: "Peserta",
+      content: "peserta",
+    },
+    {
+      id: 4,
+      icon: <IoIosSettings />,
+      label: "Settings",
+      content: "settings",
+    },
+  ];
+
   return (
     <>
       {/* header */}
       <header className="pb-3">
         <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="static" sx={{ backgroundColor: 'white' }}>
+          <AppBar position="static" sx={{ backgroundColor: "white" }}>
             <Toolbar>
               <IconButton edge="start" aria-label="open drawer" sx={{ mr: 2 }}>
                 <MenuIcon sx={{ fontSize: 30 }} />
@@ -89,8 +149,8 @@ const Dashboard = () => {
                 component="div"
                 sx={{
                   flexGrow: 1,
-                  display: { xs: 'none', sm: 'block' },
-                  color: 'black',
+                  display: { xs: "none", sm: "block" },
+                  color: "black",
                 }}
               >
                 adhivasindo
@@ -101,9 +161,9 @@ const Dashboard = () => {
                 component="div"
                 sx={{
                   flexGrow: 1,
-                  display: { xs: 'none', sm: 'block' },
-                  fontWeight: '700',
-                  color: 'black',
+                  display: { xs: "none", sm: "block" },
+                  fontWeight: "700",
+                  color: "black",
                 }}
               >
                 LEARNING MANAGEMENT SYSTEM
@@ -114,7 +174,7 @@ const Dashboard = () => {
                 </SearchIconWrapper>
                 <StyledInputBase
                   placeholder="Search…"
-                  inputProps={{ 'aria-label': 'search' }}
+                  inputProps={{ "aria-label": "search" }}
                 />
               </Search>
             </Toolbar>
@@ -126,119 +186,29 @@ const Dashboard = () => {
         {/* left-sidebar */}
         <div className=" relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
           <nav className="flex flex-col gap-1 min-w-[240px] p-2 font-sans text-base font-normal text-gray-700">
-            <button className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-gray-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none">
-              <div className="grid place-items-center mr-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  className="h-5 w-5"
+            {iconDashboard.map((item, index) => (
+              <>
+                <button
+                  onClick={() => setCurrentContent(item.content)}
+                  key={index}
+                  className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-gray-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none"
                 >
-                  <path
-                    fillRule="evenodd"
-                    d="M2.25 2.25a.75.75 0 000 1.5H3v10.5a3 3 0 003 3h1.21l-1.172 3.513a.75.75 0 001.424.474l.329-.987h8.418l.33.987a.75.75 0 001.422-.474l-1.17-3.513H18a3 3 0 003-3V3.75h.75a.75.75 0 000-1.5H2.25zm6.04 16.5l.5-1.5h6.42l.5 1.5H8.29zm7.46-12a.75.75 0 00-1.5 0v6a.75.75 0 001.5 0v-6zm-3 2.25a.75.75 0 00-1.5 0v3.75a.75.75 0 001.5 0V9zm-3 2.25a.75.75 0 00-1.5 0v1.5a.75.75 0 001.5 0v-1.5z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-              </div>
-              Dashboard
-            </button>
-            <button className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none">
-              <div className="grid place-items-center mr-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  className="h-5 w-5"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M7.5 6v.75H5.513c-.96 0-1.764.724-1.865 1.679l-1.263 12A1.875 1.875 0 004.25 22.5h15.5a1.875 1.875 0 001.865-2.071l-1.263-12a1.875 1.875 0 00-1.865-1.679H16.5V6a4.5 4.5 0 10-9 0zM12 3a3 3 0 00-3 3v.75h6V6a3 3 0 00-3-3zm-3 8.25a3 3 0 106 0v-.75a.75.75 0 011.5 0v.75a4.5 4.5 0 11-9 0v-.75a.75.75 0 011.5 0v.75z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-              </div>
-              Modul
-            </button>
-            <button className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none">
-              <div className="grid place-items-center mr-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  className="h-5 w-5"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M6.912 3a3 3 0 00-2.868 2.118l-2.411 7.838a3 3 0 00-.133.882V18a3 3 0 003 3h15a3 3 0 003-3v-4.162c0-.299-.045-.596-.133-.882l-2.412-7.838A3 3 0 0017.088 3H6.912zm13.823 9.75l-2.213-7.191A1.5 1.5 0 0017.088 4.5H6.912a1.5 1.5 0 00-1.434 1.059L3.265 12.75H6.11a3 3 0 012.684 1.658l.256.513a1.5 1.5 0 001.342.829h3.218a1.5 1.5 0 001.342-.83l.256-.512a3 3 0 012.684-1.658h2.844z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-              </div>
-              Peserta
-            </button>
-
-            <button className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none">
-              <div className="grid place-items-center mr-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  className="h-5 w-5"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 00-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 00-2.282.819l-.922 1.597a1.875 1.875 0 00.432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 000 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 00-.432 2.385l.922 1.597a1.875 1.875 0 002.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 002.28-.819l.923-1.597a1.875 1.875 0 00-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 000-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 00-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 00-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 00-1.85-1.567h-1.843zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-              </div>
-              Pemateri
-            </button>
-            <button className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none">
-              <div className="grid place-items-center mr-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  className="h-5 w-5"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M12 2.25a.75.75 0 01.75.75v9a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM6.166 5.106a.75.75 0 010 1.06 8.25 8.25 0 1011.668 0 .75.75 0 111.06-1.06c3.808 3.807 3.808 9.98 0 13.788-3.807 3.808-9.98 3.808-13.788 0-3.808-3.807-3.808-9.98 0-13.788a.75.75 0 011.06 0z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-              </div>
-              Settings
-            </button>
-            <button className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none">
-              <div className="grid place-items-center mr-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  className="h-5 w-5"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M12 2.25a.75.75 0 01.75.75v9a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM6.166 5.106a.75.75 0 010 1.06 8.25 8.25 0 1011.668 0 .75.75 0 111.06-1.06c3.808 3.807 3.808 9.98 0 13.788-3.807 3.808-9.98 3.808-13.788 0-3.808-3.807-3.808-9.98 0-13.788a.75.75 0 011.06 0z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-              </div>
-              Log Out
-            </button>
+                  <div className="mr-4">
+                    <IconButton>
+                      {item.icon} {/* Render the icon */}
+                    </IconButton>
+                    <span>{item.label}</span> {/* Render the name */}
+                  </div>
+                </button>
+              </>
+            ))}
           </nav>
         </div>
         {/* center-bar */}
-        <div className="flex-1">center</div>
+        <div className="flex-1">
+          {/* content route here on dashboard */}
+          {renderContent()}
+        </div>
         {/* right-siderbar */}
         <div className="flex-0 bg-black">
           <div className="flex">test</div>
