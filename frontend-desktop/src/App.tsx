@@ -11,6 +11,9 @@ import DashboardHome from './components/Home/Dashboard';
 import Login from './components/Auth/Login';
 import ProtectRoute from './components/Auth/ProtectRoute';
 import Test from './components/Home/Test';
+import Modul from './components/Home/Modul';
+import Perserta from './components/Home/Perserta';
+import Settings from './components/Home/Settings';
 
 function App() {
   return (
@@ -25,6 +28,9 @@ function App() {
             {/* Protected routes */}
             <Route element={<ProtectRoute />}>
               <Route path="/dashboard" element={<DashboardHome />} />
+              {/* <Route path="/dashboard/modul" element={<Modul />} />
+              <Route path='/dashboard/peserta' element={<Perserta />} />
+              <Route path='/dashboard/settings' element={<Settings/>} /> */}
             </Route>
           </Routes>
         </AuthProvider>
